@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-
-const Search = ({ setAlert, searchUsers, showClear, clearSearch }) => {
+import React, { useState, useContext, useEffect } from 'react';
+import GithubContext from '../../context/github/githubContext';
+import AlertContext from '../../context/alert/alertContext';
+const Search = () => {
+  const githubContext = useContext(GithubContext);
+  const alertContext = useContext(AlertContext);
   const [text, setText] = useState('');
 
+  useEffect(() => {
+    githubContext.getUsers();
+    //eslint-disable-next-line
+  }, []);
   const textHandler = (e) => {
     setText(e.target.value);
   };
@@ -11,9 +17,9 @@ const Search = ({ setAlert, searchUsers, showClear, clearSearch }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (text === '') {
-      setAlert('search can not be empty', 'light');
+      alertContext.setAlert('search can not be empty', 'light');
     } else {
-      searchUsers(text);
+      githubContext.searchUsers(text);
       setText('');
     }
   };
@@ -32,8 +38,11 @@ const Search = ({ setAlert, searchUsers, showClear, clearSearch }) => {
           value='search'
           className='btn btn-dark btn-block'
         />
-        {showClear && (
-          <button className='btn btn-light btn-block' onClick={clearSearch}>
+        {githubContext.users.length > 0 && (
+          <button
+            className='btn btn-light btn-block'
+            onClick={githubContext.clearUsers}
+          >
             clear
           </button>
         )}
@@ -43,9 +52,3 @@ const Search = ({ setAlert, searchUsers, showClear, clearSearch }) => {
 };
 
 export default Search;
-Search.propTypes = {
-  searchUsers: PropTypes.func.isRequired,
-  clearSearch: PropTypes.func.isRequired,
-  showClear: PropTypes.bool.isRequired,
-  setAlert: PropTypes.func.isRequired,
-};

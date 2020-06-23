@@ -3,16 +3,20 @@ import { Link } from 'react-router-dom';
 const Navbar = (props) => {
   const { title, icon } = props;
   return (
-    <nav className='navbar bg-primary'>
+    <nav className='navbar bg-dark'>
       <h1>
-        <i className='fab fa-github-square'></i> {title}
+        <i className={icon}></i> {title}
       </h1>
       <ul>
         <li>
-          <Link to='/'>home</Link>
+          <Link className='btn btn-link' to='/'>
+            home
+          </Link>
         </li>
         <li>
-          <Link to='/about'>about</Link>
+          <Link className='btn btn-link' to='/about'>
+            about
+          </Link>
         </li>
       </ul>
     </nav>
